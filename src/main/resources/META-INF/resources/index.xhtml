@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <title>Ejemplo</title>
+    </h:head>
+    <h:body>
+        <h:form id="form" enctype="multipart/form-data">
+            <p:panel header="Ejemplo">
+                <h:panelGrid columns="3" cellpadding="4">
+                    <h:outputText value="Archivo: " />
+                    <p:fileUpload id="archivo"
+                                  value="#{formulario.archivo}"
+                                  label="Archivo"
+                                  fileUploadListener="#{formulario.upload2}"
+                                  auto="true"
+                                  sizeLimit = "20000000"
+                                  update="downloadButton"
+                    />
+                    <p:messages for="archivo" display="icon" />
+
+                    <p:commandButton id="downloadButton"
+                                     disabled="#{empty formulario.descarga}"
+                                     value="Descargar #{formulario.archivo.fileName}"
+                                     ajax="false"
+                                     onclick="PrimeFaces.monitorDownload(start, stop);"
+                                     icon="ui-icon-arrowthick-1-s">
+                        <p:fileDownload value="#{formulario.descarga}" />
+                    </p:commandButton>
+
+                    <h:outputText value="Nombre: " />
+                    <p:inputText id="nombre" value="#{formulario.nombre}" required="true">
+                        <f:validateLength minimum="2" />
+                    </p:inputText>
+                    <p:messages for="nombre" display="icon" />
+
+                    <p:commandButton id="submit"
+                                     value="Submit"
+                                     update="form"
+                                     actionListener="#{formulario.upload}"
+                                     oncomplete="if(args &amp;&amp; !args.validationFailed) { PF('dialogo').show(); }"
+                    />
+                </h:panelGrid>
+            </p:panel>
+            <p:dialog header="Mensaje" widgetVar="dialogo"
+                      modal="true" resizable="false">
+                <h:panelGrid id="dialogo-panel" columns="1" cellpadding="4">
+                    <h:outputText value="#{formulario.show()}" />
+                </h:panelGrid>
+            </p:dialog>
+        </h:form>
+    </h:body>
+</html>
