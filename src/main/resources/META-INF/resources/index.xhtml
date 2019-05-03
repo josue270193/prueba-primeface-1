@@ -12,25 +12,42 @@
         <h:form id="form" enctype="multipart/form-data">
             <p:panel header="Ejemplo">
                 <h:panelGrid columns="3" cellpadding="4">
-                    <h:outputText value="Archivo: " />
+                    <h:outputText value="Archivo: "
+                                  rendered="#{empty formulario.descarga}"
+                    />
                     <p:fileUpload id="archivo"
                                   value="#{formulario.archivo}"
                                   label="Archivo"
                                   fileUploadListener="#{formulario.upload2}"
                                   auto="true"
                                   sizeLimit = "20000000"
-                                  update="downloadButton"
+                                  update="form"
+                                  rendered="#{empty formulario.descarga}"
                     />
-                    <p:messages for="archivo" display="icon" />
+                    <p:messages for="archivo"
+                                display="icon"
+                                rendered="#{empty formulario.descarga}"
+                    />
 
+                    <h:outputText value="Archivo: "
+                                  rendered="#{!empty formulario.descarga}"
+                    />
                     <p:commandButton id="downloadButton"
-                                     disabled="#{empty formulario.descarga}"
+                                     rendered="#{!empty formulario.descarga}"
                                      value="Descargar #{formulario.archivo.fileName}"
                                      ajax="false"
                                      onclick="PrimeFaces.monitorDownload(start, stop);"
                                      icon="ui-icon-arrowthick-1-s">
                         <p:fileDownload value="#{formulario.descarga}" />
                     </p:commandButton>
+                    <p:commandButton
+                            value="Limpiar Archivo"
+                            id="limpiarArchivo"
+                            action="#{formulario.limpiarArchivo}"
+                            ajax="false"
+                            update="form"
+                            rendered="#{!empty formulario.descarga}"
+                    />
 
                     <h:outputText value="Nombre: " />
                     <p:inputText id="nombre" value="#{formulario.nombre}" required="true">
@@ -41,6 +58,7 @@
                     <p:commandButton id="submit"
                                      value="Submit"
                                      update="form"
+                                     ajax="false"
                                      actionListener="#{formulario.upload}"
                                      oncomplete="if(args &amp;&amp; !args.validationFailed) { PF('dialogo').show(); }"
                     />

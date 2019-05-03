@@ -24,6 +24,11 @@ public class Formulario {
     @Getter
     private StreamedContent descarga = null;
 
+    public void limpiarArchivo() {
+        archivo = null;
+        descarga = null;
+    }
+
     public void upload2(FileUploadEvent event) throws IOException {
         this.setArchivo(event.getFile());
         if (this.archivo != null) {
